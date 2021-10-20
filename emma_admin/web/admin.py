@@ -1,3 +1,7 @@
 from django.contrib import admin
 
-# Register your models here.
+from web.models import Booking, Customer, Unit
+
+admin.site.register(Unit)
+admin.site.register(Customer)
+admin.site.register(Booking)
