@@ -24,7 +24,7 @@ RATE_PLAN_CHOICES = (
     (RATE_PLAN_FLEXIBLE, 'Flexible'),
     (RATE_PLAN_FLEXIBLE_FAMILY, 'Flexible Family'),
     (RATE_PLAN_INCLUDE_BREAKFAST, 'Include Breakfast'),
-    (RATE_PLAN_NON_REFUNDABLE, 'None Refundable'),
+    (RATE_PLAN_NON_REFUNDABLE, 'Non Refundable'),
     (RATE_PLAN_NON_REFUNDABLE_FAMILY, 'Non Refundable Family'),
 )
 
@@ -56,7 +56,7 @@ PROPERTY_CODE_CHOICES = (
 class Customer(models.Model):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
-    birth_date = models.DateField()
+    birth_date = models.DateField(null=True)
     nationality = models.CharField(max_length=2) # ISO 3166
     preferred_language = models.CharField(max_length=2, default='en') # ISO 639-1
     address_line_1 = models.CharField(max_length=50)
@@ -72,6 +72,8 @@ class Customer(models.Model):
     class Meta:
         ordering = ('last_name', 'first_name')
 
+    # TODO: make first name, last name, birth day combined unique
+
 
 class Booking(models.Model):
     customer = models.ForeignKey('web.Customer', related_name="bookings", on_delete=models.CASCADE)
@@ -81,8 +83,8 @@ class Booking(models.Model):
     
     arrival = models.DateField()
     departure = models.DateField()
-    checkin = models.DateTimeField()
-    checkout = models.DateTimeField()
+    checkin = models.DateTimeField(null=True)
+    checkout = models.DateTimeField(null=True)
     
     rate_plan = models.CharField(max_length=30, choices=RATE_PLAN_CHOICES, default=RATE_PLAN_FLEXIBLE)
     status = models.CharField(max_length=20, choices=BOOKING_STATUS_CHOICES, default=BOOKING_STATUS_OPEN)
@@ -94,8 +96,10 @@ class Booking(models.Model):
 class Unit(models.Model):
     property_code = models.CharField(max_length=3, choices=PROPERTY_CODE_CHOICES, default=PROPERTY_CODE_VIE)
     unit_group = models.CharField(max_length=20, choices=UNIT_GROUP_CHOICES, default=UNIT_GROUP_DOUBLE)
-    unit = models.CharField(max_length=5)
+    unit = models.CharField(max_length=5, unique=True)
 
     class Meta:
         ordering = ('property_code', 'unit_group', 'unit')
+
+    # TODO: make unit unique
 
