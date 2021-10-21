@@ -18,6 +18,7 @@ from django.urls import path, include
 from rest_framework import routers, serializers, viewsets
 
 from web.viewsets import BookingViewSet, CustomerViewSet, PropertyViewSet, UnitViewSet
+from web.views import main
 
 from django.contrib import admin
 admin.site.site_header = "*Emma Wanderer Admin"
@@ -36,4 +37,6 @@ urlpatterns = [
 
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('api/', include(router.urls)),
+
+    path('', main),
 ]
