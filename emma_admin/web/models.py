@@ -100,7 +100,7 @@ class Booking(models.Model):
     status = models.CharField(max_length=20, choices=BOOKING_STATUS_CHOICES, default=BOOKING_STATUS_OPEN)
 
     travel_purpose = models.CharField(max_length=50)
-  
+
 
 class Unit(models.Model):
     unit = models.CharField(max_length=5, unique=True)

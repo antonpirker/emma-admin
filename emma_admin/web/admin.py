@@ -1,22 +1,24 @@
+import json
 from django.contrib import admin
+from django.core.serializers.json import DjangoJSONEncoder
+from django.db.models import Sum
+from django.db.models.functions import TruncDay
 
 from web.models import PROPERTY_CODE_TO_NAME, Booking, Customer, Unit, Property
 
 
+@admin.register(Property)
 class PropertyAdmin(admin.ModelAdmin):
-    list_display = ('code', 'name', )
-
-admin.site.register(Property, PropertyAdmin)
+    list_display = ('name', 'code', )
 
 
+@admin.register(Unit)
 class UnitAdmin(admin.ModelAdmin):
     list_display = ('unit', 'unit_group', 'property', )
     list_filter = ('unit_group', 'property', )
 
-admin.site.register(Unit, UnitAdmin)
 
-
-
+@admin.register(Customer)
 class CustomerAdmin(admin.ModelAdmin):
     list_display = (
         'last_name', 'first_name', 'birth_date',
@@ -52,9 +54,8 @@ class CustomerAdmin(admin.ModelAdmin):
         }),
     )
 
-admin.site.register(Customer, CustomerAdmin)
 
-
+@admin.register(Booking)
 class BookingAdmin(admin.ModelAdmin):
     list_display = (
         'customer', 
@@ -68,5 +69,24 @@ class BookingAdmin(admin.ModelAdmin):
         'status',
         'property',
     )
+    ordering = ('-arrival', )
 
-admin.site.register(Booking, BookingAdmin)
+    def changelist_view(self, request, extra_context=None):
+        response = super(BookingAdmin, self).changelist_view(request, extra_context)
+        filtered_query_set = response.context_data["cl"].queryset
+        # Aggregate new subscribers per day
+        chart_data = (
+            filtered_query_set.annotate(date=TruncDay("arrival"))
+            .values("date")
+            .annotate(y=Sum("adults"))
+            .order_by("-arrival")
+        )
+
+        # Serialize and attach the chart data to the template context
+        as_json = json.dumps(list(chart_data), cls=DjangoJSONEncoder)
+        extra_context = {
+            "chart_data": as_json
+        }
+        response.context_data.update(extra_context)
+
+        return response
