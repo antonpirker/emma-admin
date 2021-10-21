@@ -19,6 +19,11 @@ from rest_framework import routers, serializers, viewsets
 
 from web.viewsets import BookingViewSet, CustomerViewSet, PropertyViewSet, UnitViewSet
 
+from django.contrib import admin
+admin.site.site_header = "*Emma Wanderer Admin"
+admin.site.site_title = "Emma Wanderer"
+admin.site.index_title = "Campus administration"
+
 
 router = routers.DefaultRouter()
 router.register(r'property', PropertyViewSet)
