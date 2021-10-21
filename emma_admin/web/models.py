@@ -121,6 +121,7 @@ class Property(models.Model):
 
     class Meta:
         ordering = ('code', )
+        verbose_name_plural = 'properties'
 
     def __str__(self):
         return self.name
