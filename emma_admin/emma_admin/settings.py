@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -27,6 +27,34 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# WunderPreview specific configuration
+IS_WUNDERPREVIEW = os.environ.get('IS_WUNDERPREVIEW', False)
+if IS_WUNDERPREVIEW:
+    # Allow all hosts when running in WunderPreview
+    ALLOWED_HOSTS = [
+        '*',
+    ]
+
+    # Data will be copied into working dir in Dockerfile
+    DATA_DIR = BASE_DIR
+
+
+# If in WunderPreview, allow connection from our other previews running in WunderPreview
+# (The regex means everything matching https://*.view.wunderpreview.com)
+#
+# This does NOT give previews from other WunderPreview customers access to this preview.
+#
+# Firewall rules in the WunderPreview VPC prevent
+# connection from a preview of customer A to a preview vom customer B.
+if IS_WUNDERPREVIEW:
+    CORS_ALLOWED_ORIGIN_REGEXES = [
+        r"^https:\/\/[^\.]+\.view\.wunderpreview\.com$",
+    ]
+else:
+    CORS_ALLOWED_ORIGINS = [
+        "null",  # if run from "file://" url. This is for local development with simple html file as client.
+        "https://example.com",
+    ]
 
 # Application definition
 
@@ -45,6 +73,8 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -122,6 +152,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = '/app-static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
