@@ -12,7 +12,8 @@ BOOKING_STATUS_CHOICES = (
     (BOOKING_STATUS_PENDING, 'Pending'),
     (BOOKING_STATUS_CONFIRMED, 'Confirmed'),
 )
-
+BOOKING_STATUS_TO_SLUG = {choice[1]: choice[0] for choice in BOOKING_STATUS_CHOICES}
+BOOKING_SLUG_TO_STATUS = {choice[0]: choice[1] for choice in BOOKING_STATUS_CHOICES}
 
 # TODO: make into own model
 RATE_PLAN_FLEXIBLE = 'flexible'
@@ -27,6 +28,8 @@ RATE_PLAN_CHOICES = (
     (RATE_PLAN_NON_REFUNDABLE, 'Non Refundable'),
     (RATE_PLAN_NON_REFUNDABLE_FAMILY, 'Non Refundable Family'),
 )
+RATE_PLAN_TO_SLUG = {choice[1]: choice[0] for choice in RATE_PLAN_CHOICES}
+RATE_SLUG_TO_PLAN = {choice[0]: choice[1] for choice in RATE_PLAN_CHOICES}
 
 
 # TODO: make into own model
@@ -38,6 +41,8 @@ UNIT_GROUP_CHOICES = (
     (UNIT_GROUP_DOUBLE, 'Double'),
     (UNIT_GROUP_FAMILY, 'Family room'),
 )
+UNIT_GROUP_TO_SLUG = {choice[1]: choice[0] for choice in UNIT_GROUP_CHOICES}
+UNIT_SLUG_TO_GROUP = {choice[1]: choice[0] for choice in UNIT_GROUP_CHOICES}
 
 
 # TODO: make into own model
@@ -51,6 +56,9 @@ PROPERTY_CODE_CHOICES = (
     (PROPERTY_CODE_MUC, 'Munich'),
     (PROPERTY_CODE_VIE, 'Vienna'),
 )
+PROPERTY_NAME_TO_CODE = {choice[1]: choice[0] for choice in PROPERTY_CODE_CHOICES}
+PROPERTY_CODE_TO_NAME = {choice[0]: choice[1] for choice in PROPERTY_CODE_CHOICES}
+
 
 
 class Customer(models.Model):
@@ -72,7 +80,8 @@ class Customer(models.Model):
     class Meta:
         ordering = ('last_name', 'first_name')
 
-    # TODO: make first name, last name, birth day combined unique
+    def __str__(self):
+        return f'{self.last_name}, {self.first_name}'
 
 
 class Booking(models.Model):

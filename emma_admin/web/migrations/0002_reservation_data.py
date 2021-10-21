@@ -10,8 +10,8 @@ from django.conf import settings
 from django.db import migrations
 from django.db.models.constraints import CheckConstraint
 from django.db.utils import IntegrityError
-from web.models import (BOOKING_STATUS_CHOICES, PROPERTY_CODE_BER,
-                        RATE_PLAN_CHOICES, UNIT_GROUP_CHOICES)
+from web.models import (BOOKING_STATUS_TO_SLUG, RATE_PLAN_TO_SLUG,
+                        UNIT_GROUP_TO_SLUG)
 
 FIRST_NAME = 0
 LAST_NAME = 1
@@ -43,11 +43,6 @@ RATE_PLAN = 27
 STATUS = 33
 ARRIVAL = 35
 DEPARTURE = 36
-
-# make choices easier selectable
-UNIT_GROUPS = {choice[1]: choice[0] for choice in UNIT_GROUP_CHOICES}
-RATE_PLANS = {choice[1]: choice[0] for choice in RATE_PLAN_CHOICES}
-STATI = {choice[1]: choice[0] for choice in BOOKING_STATUS_CHOICES}
 
 
 def load_reservation_data(apps, schema_editor):
@@ -85,7 +80,7 @@ def load_reservation_data(apps, schema_editor):
             if not Unit.objects.filter(unit=row[UNIT]).exists():
                 Unit.objects.create(
                     property_code=row[PROPERTY_CODE],
-                    unit_group=UNIT_GROUPS[row[UNIT_GROUP]],
+                    unit_group=UNIT_GROUP_TO_SLUG[row[UNIT_GROUP]],
                     unit=row[UNIT],
                 )
 
@@ -97,8 +92,8 @@ def load_reservation_data(apps, schema_editor):
                 children=row[CHILDREN],
                 arrival=parser.parse(row[ARRIVAL]),
                 departure=parser.parse(row[DEPARTURE]),
-                rate_plan=RATE_PLANS[row[RATE_PLAN]],
-                status=STATI[row[STATUS]],
+                rate_plan=RATE_PLAN_TO_SLUG[row[RATE_PLAN]],
+                status=BOOKING_STATUS_TO_SLUG[row[STATUS]],
                 travel_purpose=row[TRAVEL_PURPOSE],
             )
 
