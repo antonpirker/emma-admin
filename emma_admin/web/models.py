@@ -42,7 +42,7 @@ UNIT_GROUP_CHOICES = (
 
 # TODO: make into own model
 PROPERTY_CODE_BER = 'BER'
-PROPERTY_CODE_LDN = 'LDN'
+PROPERTY_CODE_LDN = 'LND'
 PROPERTY_CODE_MUC = 'MUC'
 PROPERTY_CODE_VIE = 'VIE'
 PROPERTY_CODE_CHOICES = (
@@ -101,5 +101,6 @@ class Unit(models.Model):
     class Meta:
         ordering = ('property_code', 'unit_group', 'unit')
 
-    # TODO: make unit unique
+    def __str__(self):
+        return f'{self.unit} ({self.unit_group} / {self.property_code})'
 
