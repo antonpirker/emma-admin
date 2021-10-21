@@ -12,7 +12,7 @@
     <link rel="preload" href="https://emmawanderer.com/assets/fonts/montserrat-latin-400-normal.woff2" as="font" crossorigin="anonymous">
     <link rel="preload" href="https://emmawanderer.com/assets/fonts/montserrat-latin-600-normal.woff2" as="font" crossorigin="anonymous">
     <link rel="preload" href="https://emmawanderer.com/assets/fonts/montserrat-latin-700-normal.woff2" as="font" crossorigin="anonymous">
-    <link rel="preload" href="https://emmawanderer.com/assets/fonts/stephen.woff" as="font" crossorigin="anonymous">    
+    <link rel="preload" href="https://emmawanderer.com/assets/fonts/stephen.woff" as="font" crossorigin="anonymous">
 
     <style>
         body {
@@ -23,12 +23,12 @@
             font-size: 1.2rem;
             font-weight: 400;
             line-height: 1.5;
-            color: #000;            
+            color: #000;
         }
         a {
             color: #ed682f;
         }
-        .branding {            
+        .branding {
             width: 10rem;
         }
         .card {
@@ -45,19 +45,16 @@
             Small Emma Wanderer Demo Administration Interface.
         </p>
         <ul>
-            <li><a href="/admin" target="_blank">Administration Interface</a></li>
-            <li><a href="/api" target="_blank">Browsable REST API</a></li>
+            <li><a href="/admin">Administration Interface</a> (User: <em>admin</em> / Pwd: <em>admin</em>)</li>
+            <li><a href="/api">Browsable REST API</a></li>
         </ul>
     </div>
 
     <div class="card">
         <p>
-        This is a Django Project deployed to Amazon Fargate. 
-        It extends the <em>Django Admin Site</em> and uses the <em>Django Rest Framework</em> for the API.
-        The <a href="https://github.com/antonpirker/emma-admin" target="_blank">source code can be found on GitHub</a>. (Please have a look at the README on GitHub.)
+        This is a Django Project deployed to Amazon Fargate. It extends the <em>Django Admin Site</em> to use it as an internal tool. It also has a REST API build with <em>Django Rest Framework</em>, so we can build a more sofisticated user experiences for our customers.
         </p>
-        <p>
-        
+        The <a href="https://github.com/antonpirker/emma-admin" target="_blank">source code can be found on GitHub</a>.
         </p>
         </div>
     </div>
