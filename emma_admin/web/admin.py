@@ -1,12 +1,21 @@
 from django.contrib import admin
 
-from web.models import PROPERTY_CODE_TO_NAME, Booking, Customer, Unit
+from web.models import PROPERTY_CODE_TO_NAME, Booking, Customer, Unit, Property
+
+
+class PropertyAdmin(admin.ModelAdmin):
+    list_display = ('code', 'name', )
+
+admin.site.register(Property, PropertyAdmin)
+
 
 class UnitAdmin(admin.ModelAdmin):
-    list_display = ('unit', 'unit_group', 'property_code', )
-    list_filter = ('unit_group', 'property_code', )
+    list_display = ('unit', 'unit_group', 'property', )
+    list_filter = ('unit_group', 'property', )
 
 admin.site.register(Unit, UnitAdmin)
+
+
 
 class CustomerAdmin(admin.ModelAdmin):
     list_display = (
@@ -57,11 +66,7 @@ class BookingAdmin(admin.ModelAdmin):
     list_filter = (
         'arrival',
         'status',
-        'unit',
+        'property',
     )
-
-    #@admin.display(empty_value='???')
-    def property(self, obj):
-        return PROPERTY_CODE_TO_NAME[obj.unit.property_code]
 
 admin.site.register(Booking, BookingAdmin)

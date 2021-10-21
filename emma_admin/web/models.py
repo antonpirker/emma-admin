@@ -87,6 +87,7 @@ class Customer(models.Model):
 class Booking(models.Model):
     customer = models.ForeignKey('web.Customer', related_name="bookings", on_delete=models.CASCADE)
     unit = models.ForeignKey('web.Unit', related_name="bookings", on_delete=models.SET_NULL, null=True)
+    property = models.ForeignKey('web.Property', related_name="bookings", on_delete=models.SET_NULL, null=True)
     adults = models.PositiveSmallIntegerField()
     children = models.PositiveSmallIntegerField()
     
@@ -99,17 +100,27 @@ class Booking(models.Model):
     status = models.CharField(max_length=20, choices=BOOKING_STATUS_CHOICES, default=BOOKING_STATUS_OPEN)
 
     travel_purpose = models.CharField(max_length=50)
-
   
 
 class Unit(models.Model):
-    property_code = models.CharField(max_length=3, choices=PROPERTY_CODE_CHOICES, default=PROPERTY_CODE_VIE)
-    unit_group = models.CharField(max_length=20, choices=UNIT_GROUP_CHOICES, default=UNIT_GROUP_DOUBLE)
     unit = models.CharField(max_length=5, unique=True)
+    unit_group = models.CharField(max_length=20, choices=UNIT_GROUP_CHOICES, default=UNIT_GROUP_DOUBLE)
+
+    property = models.ForeignKey('web.Property', on_delete=models.CASCADE)
 
     class Meta:
-        ordering = ('property_code', 'unit_group', 'unit')
+        ordering = ('property', 'unit_group', 'unit')
 
     def __str__(self):
-        return f'{self.unit} ({self.unit_group} / {self.property_code})'
+        return f'{self.unit} ({self.unit_group} / {self.property.name})'
 
+
+class Property(models.Model):
+    code = models.CharField(max_length=3)
+    name = models.CharField(max_length=50)
+
+    class Meta:
+        ordering = ('code', )
+
+    def __str__(self):
+        return self.name
