@@ -1,2 +1,16 @@
+# Django
 Django==3.2.8
 python-dateutil==2.8.2
+
+# Rest API
+djangorestframework==3.12.4
+
+# Setting CORS headers
+django-cors-headers==3.10.0
+
+# Serving the site
+gunicorn==20.1.0
+whitenoise==5.3.0
+
+# Debugging
+ipdb==0.13.9
